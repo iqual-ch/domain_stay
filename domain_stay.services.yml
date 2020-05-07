@@ -1,0 +1,4 @@
+services:
+  domain_stay.source_alter:
+    class: Drupal\domain_stay\Service\SourceAlter
+    arguments: ['@domain.negotiator']
