@@ -1,5 +1,7 @@
 <?php
 
+namespace Drupal\domain_stay\Service;
+
 use Drupal\domain\DomainNegotiatorInterface;
 
 /**
@@ -7,15 +9,23 @@ use Drupal\domain\DomainNegotiatorInterface;
  */
 class SourceAlter {
 
+
   /**
-   * Undocumented variable.
+   * The domain negotiator.
    *
-   * @var [type]
+   * @var \Drupal\domain\DomainNegotiatorInterface
+   */
+  protected $domainNegotiator = FALSE;
+
+  /**
+   * The entity being processed.
+   *
+   * @var \Drupal\Core\Entity\ContentEntityBase
    */
   protected static $entity = NULL;
 
   /**
-   * Undocumented variable.
+   * Wether the source has been altered in the current request.
    *
    * @var bool
    */
@@ -43,13 +53,13 @@ class SourceAlter {
    */
   public function setSource(&$source, $path, array $options) {
     if ($source != NULL && !empty($options['entity'])) {
-      $this->entity = $options['entity'];
-      if ($this->entity->hasField('field_domain_access') &&
+      static::$entity = $options['entity'];
+      if (static::$entity->hasField('field_domain_access') &&
       $this->domainNegotiator->getActiveId() != $source->id()) {
-        foreach ($this->entity->field_domain_access as $item) {
+        foreach (static::$entity->field_domain_access as $item) {
           if ($item->target_id == $this->domainNegotiator->getActiveId()) {
             $source = NULL;
-            $this->altered = TRUE;
+            static::$altered = TRUE;
             return;
           }
         }
@@ -58,19 +68,24 @@ class SourceAlter {
   }
 
   /**
-   * Undocumented function.
+   * Adjust the canonical meta tag to match source or default domain.
    *
    * @param array $attachments
    *
    * @return void
    */
   public function alterCanonical(array &$attachments) {
-    if ($this->altered != NULL && !empty($attachments['#attached']['html_head'])) {
+    if (static::$altered != NULL && !empty($attachments['#attached']['html_head'])) {
       foreach ($attachments['#attached']['html_head'] as $key => $entry) {
         if ($entry[1] == 'canonical_url') {
-          $host = \Drupal::request()->getHost();
-          $source = \Drupal::entityTypeManager()->getStorage('domain')->loadDefaultDomain();
-          $entry[0]['#attributes']['href'] = str_replace($host, $source->getHostname(), $entry[0]['#attributes']['href']);
+          $sourceDomain = $this->domainNegotiator->getActiveDomain();
+          if (static::$entity->hasField('field_domain_source')) {
+            $sourceDomain = static::$entity->field_domain_source->entity;
+          }
+          else {
+            $sourceDomain = \Drupal::entityTypeManager()->getStorage('domain')->loadDefaultDomain();
+          }
+          $entry[0]['#attributes']['href'] = $sourceDomain->getRawPath() . static::$entity->toUrl('canonical')->toString();;
           $attachments['#attached']['html_head'][$key] = $entry;
         }
       }
