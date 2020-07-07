@@ -52,7 +52,7 @@ class SourceAlter {
    *   \Drupal\Core\PathProcessor\OutboundPathProcessorInterface.
    */
   public function setSource(&$source, $path, array $options) {
-    if ($source != NULL && !empty($options['entity'])) {
+    if ($source != NULL && !empty($options['entity']) && !\Drupal::service('router.admin_context')->isAdminRoute()) {
       static::$entity = $options['entity'];
       if (static::$entity->hasField('field_domain_access') &&
       $this->domainNegotiator->getActiveId() != $source->id()) {
@@ -85,7 +85,7 @@ class SourceAlter {
           else {
             $sourceDomain = \Drupal::entityTypeManager()->getStorage('domain')->loadDefaultDomain();
           }
-          $entry[0]['#attributes']['href'] = $sourceDomain->getRawPath() . static::$entity->toUrl('canonical')->toString();;
+          $entry[0]['#attributes']['href'] = $sourceDomain->getRawPath() . static::$entity->toUrl('canonical')->toString();
           $attachments['#attached']['html_head'][$key] = $entry;
         }
       }
