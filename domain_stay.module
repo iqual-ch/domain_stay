@@ -2,18 +2,19 @@
 
 /**
  * @file
+ * Contains domain_stay.module.
  */
 
 /**
- *
+ * Implements hook_domain_source_alter().
  */
-function pagedesigner_domain_source_alter(&$source, $path, array $options) {
+function domain_stay_domain_source_alter(&$source, $path, array $options) {
   \Drupal::service('domain_stay.source_alter')->setSource($source, $path, $options);
 }
 
 /**
- *
+ * Implements hook_page_attachment().
  */
-function pagedesigner_page_attachments(array &$attachments) {
+function domain_stay_page_attachments(array &$attachments) {
   \Drupal::service('domain_stay.source_alter')->alterCanonical($attachments);
 }
