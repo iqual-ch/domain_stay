@@ -11,7 +11,6 @@ use Drupal\Core\Entity\EntityTypeManager;
  */
 class SourceAlter {
 
-
   /**
    * The domain negotiator.
    *
@@ -48,7 +47,7 @@ class SourceAlter {
   protected $entityTypeManager = FALSE;
 
   /**
-   * Undocumented function.
+   * Creates a new SourceAlter instance.
    *
    * @param \Drupal\domain\DomainNegotiatorInterface $domain_negotiator
    *   The domain negotiator.
