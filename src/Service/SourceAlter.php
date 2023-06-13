@@ -45,7 +45,7 @@ class SourceAlter {
    *
    * @var \Drupal\Core\Entity\EntityTypeManager
    */
-  protected $entitiyTypeManager = FALSE;
+  protected $entityTypeManager = FALSE;
 
   /**
    * Undocumented function.
@@ -60,7 +60,7 @@ class SourceAlter {
   public function __construct(DomainNegotiatorInterface $domain_negotiator, AdminContext $admin_route_context, EntityTypeManager $entity_type_manager) {
     $this->domainNegotiator = $domain_negotiator;
     $this->adminRouteContext = $admin_route_context;
-    $this->entitiyTypeManager = $entity_type_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -105,7 +105,7 @@ class SourceAlter {
             $sourceDomain = static::$entity->field_domain_source->entity;
           }
           else {
-            $sourceDomain = $this->entitiyTypeManager->getStorage('domain')->loadDefaultDomain();
+            $sourceDomain = $this->entityTypeManager->getStorage('domain')->loadDefaultDomain();
           }
           $entry[0]['#attributes']['href'] = $sourceDomain->getRawPath() . static::$entity->toUrl('canonical')->toString();
           $attachments['#attached']['html_head'][$key] = $entry;
