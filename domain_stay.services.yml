@@ -1,4 +1,4 @@
 services:
   domain_stay.source_alter:
     class: Drupal\domain_stay\Service\SourceAlter
-    arguments: ['@domain.negotiator']
+    arguments: ['@domain.negotiator', '@router.admin_context', '@entity_type.manager']

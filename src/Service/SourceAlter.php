@@ -3,12 +3,13 @@
 namespace Drupal\domain_stay\Service;
 
 use Drupal\domain\DomainNegotiatorInterface;
+use Drupal\Core\Routing\AdminContext;
+use Drupal\Core\Entity\EntityTypeManager;
 
 /**
- *
+ * The Source alter service.
  */
 class SourceAlter {
-
 
   /**
    * The domain negotiator.
@@ -32,12 +33,33 @@ class SourceAlter {
   protected static $altered = FALSE;
 
   /**
-   * Undocumented function.
+   * The admin route.
    *
-   * @param \Drupal\domain\DomainNegotiatorInterface $domainNegotiator
+   * @var \Drupal\Core\Routing\AdminContext
    */
-  public function __construct(DomainNegotiatorInterface $domainNegotiator) {
-    $this->domainNegotiator = $domainNegotiator;
+  protected $adminRouteContext = FALSE;
+
+  /**
+   * The admin route.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManager
+   */
+  protected $entityTypeManager = FALSE;
+
+  /**
+   * Creates a new SourceAlter instance.
+   *
+   * @param \Drupal\domain\DomainNegotiatorInterface $domain_negotiator
+   *   The domain negotiator.
+   * @param \Drupal\Core\Routing\AdminContext $admin_route_context
+   *   The domain negotiator.
+   * @param \Drupal\Core\Entity\EntityTypeManager $entity_type_manager
+   *   The entity type manager.
+   */
+  public function __construct(DomainNegotiatorInterface $domain_negotiator, AdminContext $admin_route_context, EntityTypeManager $entity_type_manager) {
+    $this->domainNegotiator = $domain_negotiator;
+    $this->adminRouteContext = $admin_route_context;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -52,7 +74,7 @@ class SourceAlter {
    *   \Drupal\Core\PathProcessor\OutboundPathProcessorInterface.
    */
   public function setSource(&$source, $path, array $options) {
-    if ($source != NULL && !empty($options['entity']) && !\Drupal::service('router.admin_context')->isAdminRoute()) {
+    if ($source != NULL && !empty($options['entity']) && !$this->adminRouteContext->isAdminRoute()) {
       static::$entity = $options['entity'];
       if (static::$entity->hasField('field_domain_access') &&
       $this->domainNegotiator->getActiveId() != $source->id()) {
@@ -71,8 +93,7 @@ class SourceAlter {
    * Adjust the canonical meta tag to match source or default domain.
    *
    * @param array $attachments
-   *
-   * @return void
+   *   Render array containingg attachments.
    */
   public function alterCanonical(array &$attachments) {
     if (static::$altered != NULL && !empty($attachments['#attached']['html_head'])) {
@@ -83,7 +104,7 @@ class SourceAlter {
             $sourceDomain = static::$entity->field_domain_source->entity;
           }
           else {
-            $sourceDomain = \Drupal::entityTypeManager()->getStorage('domain')->loadDefaultDomain();
+            $sourceDomain = $this->entityTypeManager->getStorage('domain')->loadDefaultDomain();
           }
           $entry[0]['#attributes']['href'] = $sourceDomain->getRawPath() . static::$entity->toUrl('canonical')->toString();
           $attachments['#attached']['html_head'][$key] = $entry;
