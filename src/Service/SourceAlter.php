@@ -50,17 +50,17 @@ class SourceAlter {
   /**
    * Undocumented function.
    *
-   * @param \Drupal\domain\DomainNegotiatorInterface $domainNegotiator
+   * @param \Drupal\domain\DomainNegotiatorInterface $domain_negotiator
    *   The domain negotiator.
-   * @param \Drupal\Core\Routing\AdminContext $adminRouteContext
+   * @param \Drupal\Core\Routing\AdminContext $admin_route_context
    *   The domain negotiator.
-   * @param \Drupal\Core\Entity\EntityTypeManager $entitiyTypeManager
+   * @param \Drupal\Core\Entity\EntityTypeManager $entity_type_manager
    *   The entity type manager.
    */
-  public function __construct(DomainNegotiatorInterface $domainNegotiator, AdminContext $adminRouteContext, EntityTypeManager $entitiyTypeManager) {
-    $this->domainNegotiator = $domainNegotiator;
-    $this->adminRouteContext = $adminRouteContext;
-    $this->entitiyTypeManager = $entitiyTypeManager;
+  public function __construct(DomainNegotiatorInterface $domain_negotiator, AdminContext $admin_route_context, EntityTypeManager $entity_type_manager) {
+    $this->domainNegotiator = $domain_negotiator;
+    $this->adminRouteContext = $admin_route_context;
+    $this->entitiyTypeManager = $entity_type_manager;
   }
 
   /**
