@@ -1,9 +1,11 @@
 {
-    "name": "iqual/domain_stay",
-    "description": "Keep domain based on domain access.",
-    "type": "drupal-custom-module",
-    "minimum-stability": "dev",
-    "require": {
-        "drupal/domain": "*"
-    }
+  "name": "iqual/domain_stay",
+  "description": "Keep domain based on domain access.",
+  "type": "drupal-custom-module",
+  "minimum-stability": "dev",
+  "require": {
+    "drupal/domain": "*",
+    "php": "^8.1",
+    "drupal/core": "^9.5 || ^10"
+  }
 }
