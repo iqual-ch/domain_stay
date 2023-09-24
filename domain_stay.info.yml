@@ -2,7 +2,7 @@ name: Domain Stay
 description: 'Keep domain based on domain access.'
 type: module
 package: Domain
-core: 8.x
+
 core_version_requirement: ^9.5 || ^10
 dependencies:
   - drupal:node
