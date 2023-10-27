@@ -2,9 +2,9 @@
 
 namespace Drupal\domain_stay\Service;
 
-use Drupal\domain\DomainNegotiatorInterface;
-use Drupal\Core\Routing\AdminContext;
 use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Routing\AdminContext;
+use Drupal\domain\DomainNegotiatorInterface;
 
 /**
  * The Source alter service.
