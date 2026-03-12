@@ -6,6 +6,6 @@
   "require": {
     "php": "^8.1",
     "drupal/core": "^10 || ^11",
-    "drupal/domain": "^3.0"
+    "drupal/domain": "^2.0 || ^3.0"
   }
 }
